@@ -31,10 +31,10 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequestDto>
 
         RuleFor(x => x.ConfirmPassword)
             .Equal(x => x.Password).WithMessage("Passwords do not match");
-
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number is required")
-            .Matches(@"^\+?[1-9]\d{1,14}$").WithMessage("Invalid phone number format");
+            .Matches(@"^(\+20|0)?1[0125][0-9]{8}$")
+            .WithMessage("Invalid Egyptian phone number format");
     }
 }
 

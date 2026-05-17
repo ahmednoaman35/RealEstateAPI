@@ -13,6 +13,7 @@ using RealEstateAPI.Infrastructure.Data;
 using RealEstateAPI.Infrastructure.Identity;
 using RealEstateAPI.Infrastructure.Repositories;
 using RealEstateAPI.Infrastructure.Repositories.Interfaces;
+using RealEstateAPI.Infrastructure.Services;
 using System.Text;
 
 namespace RealEstateAPI.API.Extensions;
@@ -83,7 +84,7 @@ public static class ServiceExtensions
         services.AddScoped<IReviewService, ReviewService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IInquiryService, InquiryService>();
-
+        services.AddScoped<IAdminService, AdminService>();
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPropertyRepository, PropertyRepository>();

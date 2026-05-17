@@ -30,7 +30,7 @@ public class PropertiesController : ControllerBase
         return Guid.Parse(userIdClaim ?? throw new UnauthorizedAccessException("User ID not found"));
     }
 
-    [Authorize]
+    [Authorize(Roles = "Broker,Admin")]
     [HttpGet("mine")]
     public async Task<IActionResult> GetMyProperties()
     {
@@ -98,6 +98,7 @@ public class PropertiesController : ControllerBase
     /// <summary>
     /// Create a new property
     /// </summary>
+    [Authorize(Roles = "Broker,Admin")]
     [HttpPost]
     [ProducesResponseType(typeof(ApiResponse<PropertyDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
@@ -124,6 +125,7 @@ public class PropertiesController : ControllerBase
     /// <summary>
     /// Update an existing property
     /// </summary>
+    [Authorize(Roles = "Boker")]
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
@@ -150,9 +152,8 @@ public class PropertiesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Delete a property
-    /// </summary>
+
+    [Authorize(Roles = "Broker,Admin")]
     [HttpDelete("{id}")]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
@@ -179,8 +180,19 @@ public class PropertiesController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Broker,Admin")]
+    [HttpPost("{id}/sell")]
+    public async Task<IActionResult> MarkAsSold(Guid id)
+    {
+        var userId = GetUserId();
 
+        var result = await _propertyService.MarkAsSoldAsync(id, userId);
 
+        if (!result)
+            return BadRequest("Cannot mark property as sold");
+
+        return Ok("Property marked as sold");
+    }
 
 
 

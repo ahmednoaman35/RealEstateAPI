@@ -1,3 +1,5 @@
+using RealEstateAPI.Domain.Enums;
+
 namespace RealEstateAPI.Domain.Entities;
 
 /// <summary>
@@ -10,7 +12,7 @@ public class User : BaseEntity
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
-    public string Role { get; set; } = "User"; // Admin, User
+    public UserRole Role { get; set; } = UserRole.User;
     public bool IsActive { get; set; } = true;
     
     // Navigation Properties
