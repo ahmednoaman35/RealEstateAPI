@@ -17,6 +17,9 @@ public class InquiryDto
     public string? AdminResponse { get; set; }
     public DateTime? RespondedAt { get; set; }
     public DateTime CreatedAt { get; set; }
+
+
+    public string WhatsAppUrl { get; set; } = string.Empty;
 }
 
 public class CreateInquiryDto

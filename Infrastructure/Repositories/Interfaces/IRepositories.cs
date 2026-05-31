@@ -16,3 +16,8 @@ public interface IPropertyRepository : IBaseRepository<Property>
     Task<List<Property>> GetByOwnerIdAsync(Guid ownerId);
 }
 
+
+    public interface IInquiryRepository : IBaseRepository<Inquiry>
+{
+    Task<Inquiry?> GetByIdWithDetailsAsync(Guid id);
+}

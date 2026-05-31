@@ -88,6 +88,7 @@ public static class ServiceExtensions
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPropertyRepository, PropertyRepository>();
+        services.AddScoped<IInquiryRepository, InquiryRepository>();
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
         // Infrastructure
