@@ -14,6 +14,7 @@ using RealEstateAPI.Infrastructure.Identity;
 using RealEstateAPI.Infrastructure.Repositories;
 using RealEstateAPI.Infrastructure.Repositories.Interfaces;
 using RealEstateAPI.Infrastructure.Services;
+using RealEstateAPI.Services;
 using System.Text;
 
 namespace RealEstateAPI.API.Extensions;
@@ -85,6 +86,8 @@ public static class ServiceExtensions
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IInquiryService, InquiryService>();
         services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<IWhatsAppService, WhatsAppService>();
+
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IPropertyRepository, PropertyRepository>();
