@@ -5,6 +5,8 @@ using RealEstateAPI.Application.DTOs.Inquiry;
 using RealEstateAPI.Application.Interfaces;
 using RealEstateAPI.Domain.Entities;
 using RealEstateAPI.Domain.Interfaces;
+using RealEstateAPI.Infrastructure.Repositories;
+using RealEstateAPI.Infrastructure.Repositories.Interfaces;
 
 namespace RealEstateAPI.Application.Services;
 
@@ -13,13 +15,15 @@ namespace RealEstateAPI.Application.Services;
 /// </summary>
 public class InquiryService : IInquiryService
 {
-    private readonly IBaseRepository<Inquiry> _inquiryRepository;
+    private readonly IInquiryRepository _inquiryRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<InquiryService> _logger;
 
     public InquiryService(
-        IBaseRepository<Inquiry> inquiryRepository,
-        IMapper mapper,
+
+         IInquiryRepository inquiryRepository,
+
+    IMapper mapper,
         ILogger<InquiryService> logger)
     {
         _inquiryRepository = inquiryRepository;
@@ -85,6 +89,27 @@ public class InquiryService : IInquiryService
         }
     }
 
+    //public async Task<InquiryDto> CreateAsync(CreateInquiryDto dto, Guid userId)
+    //{
+    //    try
+    //    {
+    //        var inquiry = _mapper.Map<Inquiry>(dto);
+    //        inquiry.UserId = userId;
+
+    //        var createdInquiry = await _inquiryRepository.AddAsync(inquiry);
+
+    //        _logger.LogInformation("Inquiry created for property: {PropertyId} by user: {UserId}", 
+    //            dto.PropertyId, userId);
+
+    //        return _mapper.Map<InquiryDto>(createdInquiry);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        _logger.LogError(ex, "Error creating inquiry");
+    //        throw;
+    //    }
+    //}
+
     public async Task<InquiryDto> CreateAsync(CreateInquiryDto dto, Guid userId)
     {
         try
@@ -94,10 +119,30 @@ public class InquiryService : IInquiryService
 
             var createdInquiry = await _inquiryRepository.AddAsync(inquiry);
 
-            _logger.LogInformation("Inquiry created for property: {PropertyId} by user: {UserId}", 
-                dto.PropertyId, userId);
-            
-            return _mapper.Map<InquiryDto>(createdInquiry);
+            //  Õ„Ì· »Ì«‰«  «·⁄ﬁ«— Ê«·„«·ﬂ
+            var inquiryWithDetails =
+                await _inquiryRepository.GetByIdWithDetailsAsync(createdInquiry.Id);
+
+            var inquiryDto = _mapper.Map<InquiryDto>(inquiryWithDetails);
+
+            // —ﬁ„ «·Ê« ”«» «·Œ«’ »’«Õ» «·⁄ﬁ«—
+            var phone = inquiryWithDetails.Property.Owner.PhoneNumber
+                .Replace("+", "")
+                .Replace(" ", "");
+
+            var message = Uri.EscapeDataString(
+                $"«·”·«„ ⁄·Ìﬂ„° √‰« „Â „ »«·⁄ﬁ«—: {inquiryWithDetails.Property.Title}"
+            );
+
+            inquiryDto.WhatsAppUrl =
+                $"https://wa.me/{phone}?text={message}";
+
+            _logger.LogInformation(
+                "Inquiry created for property: {PropertyId} by user: {UserId}",
+                dto.PropertyId,
+                userId);
+
+            return inquiryDto;
         }
         catch (Exception ex)
         {

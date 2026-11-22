@@ -1,8 +1,11 @@
+using RealEstateAPI.Application.DTOs.admin;
 using RealEstateAPI.Application.DTOs.Auth;
+using RealEstateAPI.Application.DTOs.Common;
+using RealEstateAPI.Application.DTOs.Inquiry;
 using RealEstateAPI.Application.DTOs.Property;
 using RealEstateAPI.Application.DTOs.Review;
-using RealEstateAPI.Application.DTOs.Inquiry;
-using RealEstateAPI.Application.DTOs.Common;
+using RealEstateAPI.Domain.Entities;
+using RealEstateAPI.Domain.Enums;
 
 namespace RealEstateAPI.Application.Interfaces;
 
@@ -20,6 +23,8 @@ public interface IPropertyService
     Task<bool> UpdateAsync(Guid id, UpdatePropertyDto dto, Guid userId);
     Task<bool> DeleteAsync(Guid id, Guid userId);
     Task<List<PropertyDto>> GetMyPropertiesAsync(Guid ownerId);
+  
+    Task<bool> MarkAsSoldAsync(Guid propertyId, Guid userId);
 }
 
 public interface IReviewService
@@ -48,3 +53,14 @@ public interface IInquiryService
     Task<bool> UpdateStatusAsync(Guid id, UpdateInquiryStatusDto dto);
     Task<bool> DeleteAsync(Guid id, Guid userId);
 }
+    public interface IAdminService
+{
+    Task<AdminDashboardDto> GetDashboardAsync();
+
+
+
+
+    Task CreateBrokerAsync(CreateBrokerDto dto);
+
+}
+

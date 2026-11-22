@@ -5,6 +5,7 @@ using RealEstateAPI.Application.Interfaces;
 using RealEstateAPI.Domain.Entities;
 using RealEstateAPI.Infrastructure.Repositories.Interfaces;
 using RealEstateAPI.Infrastructure.Identity;
+using RealEstateAPI.Domain.Enums;
 
 namespace RealEstateAPI.Application.Services;
 
@@ -45,7 +46,7 @@ public class AuthService : IAuthService
             // Create user entity
             var user = _mapper.Map<User>(request);
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-            user.Role = "User"; // Default role
+            user.Role = UserRole.User; // Default role
             user.IsActive = true;
 
             // Save to database

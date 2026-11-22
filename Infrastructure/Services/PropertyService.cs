@@ -5,6 +5,7 @@ using RealEstateAPI.Application.DTOs.Common;
 using RealEstateAPI.Application.DTOs.Property;
 using RealEstateAPI.Application.Interfaces;
 using RealEstateAPI.Domain.Entities;
+using RealEstateAPI.Domain.Enums;
 using RealEstateAPI.Infrastructure.Repositories.Interfaces;
 using System;
 using System.Linq;
@@ -236,6 +237,39 @@ public class PropertyService : IPropertyService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error deleting property: {PropertyId}", id);
+            throw;
+        }
+    }
+
+
+    public async Task<bool> MarkAsSoldAsync(Guid propertyId, Guid userId)
+    {
+        try
+        {
+            var property = await _propertyRepository.GetByIdAsync(propertyId);
+
+            if (property == null || property.IsDeleted)
+                return false;
+
+            // Ownership check
+            if (property.OwnerId != userId)
+                return false;
+
+            // business rule: ·« Ì„ﬂ‰ »Ì⁄ ⁄ﬁ«— „ »«⁄ »«·›⁄·
+            if (property.Status == PropertyStatus.Sold)
+                return false;
+
+            property.Status = PropertyStatus.Sold;
+            property.UpdatedAt = DateTime.UtcNow;
+
+            await _propertyRepository.UpdateAsync(property);
+
+            _logger.LogInformation("Property marked as sold: {PropertyId}", propertyId);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error marking property as sold: {PropertyId}", propertyId);
             throw;
         }
     }

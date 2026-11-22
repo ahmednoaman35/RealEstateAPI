@@ -29,7 +29,7 @@ public static class DbInitializer
                 Email = "admin@realestate.com",
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 PhoneNumber = "+1234567890",
-                Role = "Admin",
+                Role = UserRole.Admin,
                 IsActive = true
             };
 
@@ -37,25 +37,7 @@ public static class DbInitializer
         }
 
         // Seed Regular Users
-        var userExists = await context.Users.AnyAsync(u => u.Email == "user@realestate.com");
-
-        if (!userExists)
-        {
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
-                FirstName = "Test",
-                LastName = "User",
-                Email = "user@realestate.com",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("User@123"),
-                PhoneNumber = "+1111111111",
-                Role = "User",
-                IsActive = true
-            };
-
-            await context.Users.AddAsync(user);
-        }
-
+    
         await context.SaveChangesAsync();
     }
 }

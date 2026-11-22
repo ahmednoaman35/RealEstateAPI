@@ -9,5 +9,6 @@ public enum PropertyStatus
     Sold = 2,
     Rented = 3,
     UnderContract = 4,
-    Pending = 5
+    Pending = 5,
+    Active = 6
 }

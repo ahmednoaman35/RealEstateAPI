@@ -286,7 +286,7 @@ namespace RealEstateAPI.API.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("RealEstateAPI.Domain.Entities.User", b =>
+            modelBuilder.Entity("User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -299,6 +299,9 @@ namespace RealEstateAPI.API.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("EnableWhatsApp")
+                        .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -324,13 +327,15 @@ namespace RealEstateAPI.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
+                    b.Property<int>("Role")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("WhatsAppNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -348,7 +353,7 @@ namespace RealEstateAPI.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstateAPI.Domain.Entities.User", "User")
+                    b.HasOne("User", "User")
                         .WithMany("Favorites")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -367,7 +372,7 @@ namespace RealEstateAPI.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstateAPI.Domain.Entities.User", "User")
+                    b.HasOne("User", "User")
                         .WithMany("Inquiries")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -380,7 +385,7 @@ namespace RealEstateAPI.API.Migrations
 
             modelBuilder.Entity("RealEstateAPI.Domain.Entities.Property", b =>
                 {
-                    b.HasOne("RealEstateAPI.Domain.Entities.User", "Owner")
+                    b.HasOne("User", "Owner")
                         .WithMany("Properties")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -408,7 +413,7 @@ namespace RealEstateAPI.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RealEstateAPI.Domain.Entities.User", "User")
+                    b.HasOne("User", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -430,7 +435,7 @@ namespace RealEstateAPI.API.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("RealEstateAPI.Domain.Entities.User", b =>
+            modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("Favorites");
 
